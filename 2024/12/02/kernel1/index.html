@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="myslqyr">
+
+
+
+
+
+<title>kernel1 | myslqyr&#39;s blog</title>
+
+
+
+    <link rel="icon" href="/favicon1.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">myslqyr&#39;s blog</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">myslqyr&#39;s blog</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">kernel1</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">myslqyr</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">December 2, 2024&nbsp;&nbsp;15:49:38</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/os/">os</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="内核1"><a href="#内核1" class="headerlink" title="内核1"></a>内核1</h1><p>在前一篇文章提到了，我们将内核的代码放置在了内存的1MB处，其实只要留给loader足够大的空间，放在哪里都可以。（但是要考虑用户态代码的存放位置。）但是我们还有一个没有解决的问题就是，我们如何将启动信息作为参数传递给内核？</p>
+<h3 id="C语言函数调用的过程"><a href="#C语言函数调用的过程" class="headerlink" title="C语言函数调用的过程"></a>C语言函数调用的过程</h3><p>在C语言中，栈为函数提供了调用所需的内存空间。每个函数都有属于自己的栈帧，其中包括函数的局部变量、参数、返回地址等信息。当一个函数调用另一个函数时，被调用的函数的栈帧被压入栈中，然后控制权转移到被调用函数。被调用函数执行完毕后，控制权返回给调用函数，调用函数的栈帧被弹出栈中，恢复到调用前的状态。在函数调用时，先将返回地址压入到栈中，然后函数参数从右至左压入栈中，接着对应的call指令自动压入返回地址到栈中调用函数。（第一个返回地址是函数的返回地址，第二个是call指令下一条指令的地址。）如果函数有参数，则通过esp寄存器的值加上对应的偏移量来取函数参数。不过我们跳转到kernel之后首先进入的是汇编环境，编译器不会帮助我们来完成自动的函数调用，所以我们要手动将传递给kernel的参数压入栈中。</p>
+<p>好吧我知道这么说会很抽象，因为我写着写着就晕了，我们来看一下栈中的内容来更好的理解一下上面那段话。<img src="/2024/12/02/kernel1/1.jpg" alt="栈中内容"><br>通过观察栈中内存的内容我们可以发现只要取出esp+4处的内容压入栈中就可以得到参数供函数调用了。所以代码为</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">push 4(%esp)</span><br><span class="line">call kernel_init</span><br></pre></td></tr></table></figure>
+
+
+<p>（挂上一个参考视频，讲解了CSAPP书中的内容）<br><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV19X4y1P7Pn/?vd_source=9837a59a9f1a8194939d79fc5cee61c0">【CSAPP-深入理解计算机系统】3-7. 过程（函数调用）_哔哩哔哩_bilibili</a></p>
+<h3 id="GDT表"><a href="#GDT表" class="headerlink" title="GDT表"></a>GDT表</h3><p>进入内核后，我们首先要来重新设置一下最核心、最重要的结构之一：GDT表。为什么它很重要呢？附上一张图片：<br><img src="/2024/12/02/kernel1/2.jpg" alt="GDT"><br>在这张图中我们可以看到GDT表位于最中间的位置，图中显示了中断处理、进程等功能都与GDT表有关。表中的项叫做段描述符(sigment descriptor)，结构如下：<br><img src="/2024/12/02/kernel1/3.jpg" alt="段描述符"><br>段描述符的结构大致可以分为三类：基地址、段界限值、属性值。所以一个GDT表可以看作是段描述符这个结构体的数组。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#pragma pack(1)</span><br><span class="line">typedef struct _segment_desc_t</span><br><span class="line">&#123;</span><br><span class="line">	uint16_t limit15_0;</span><br><span class="line">	uint16_t base15_0;</span><br><span class="line">	uint8_t base23_16;</span><br><span class="line">	uint16_t attr;</span><br><span class="line">	uint8_t base31_24;</span><br><span class="line">&#125; segment_desc_t;</span><br><span class="line">#pragma pack()  //防止编译器对结构体进行优化</span><br><span class="line"></span><br><span class="line">static segment_desc_t gdt_table[GDT_TABLE_SIZE];</span><br></pre></td></tr></table></figure>
+<p>然后在初始化cpu函数中对gdt表进行初始化即可。在gdt表中，选择子代表了表项的索引，即表项相对于gdt表的偏移量。代码中selector &gt;&gt; 3是将选择子(位)转化成选择子(字节)来找到对应的表项。这个道理跟</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">int a[10];</span><br><span class="line">a+1---&gt;数组第二项的指针</span><br></pre></td></tr></table></figure>
+<p>是一样的。</p>
+<h3 id="保护模式平坦模型简介"><a href="#保护模式平坦模型简介" class="headerlink" title="保护模式平坦模型简介"></a>保护模式平坦模型简介</h3><p>在这个系统中我们使用了平坦模型作为内存的模型(所有段的段起始地址设为0，长度设为4G，分页大小4KB)。所以从逻辑地址到线性地址的转换为：</p>
+<p>①从段寄存器中取出段选择子</p>
+<p>②根据段选择子查找GDT表项获得基地址</p>
+<p>③基地址+偏移量</p>
+<p>段选择子的结构为<br><img src="/2024/12/02/kernel1/4.jpg" alt="segment selector"><br>3~15位的Index为段选择子的索引，取出index后还要将其右移三位才是索引值，对应了上面的selector &gt;&gt; 3。</p>
+<h3 id="重新加载GDT表"><a href="#重新加载GDT表" class="headerlink" title="重新加载GDT表"></a>重新加载GDT表</h3><p>介绍完了平坦模型，我们就要在GDT表中加入代码段、数据段的表项了。由于第零个表项是系统占用，所以我们将代码段的选择子设置为0x08，数据段的选择子设置为0x10。根据平坦模型的特点，base为0，limit是4GB，然后设置属性值，再使用lgdt指令将gdt表加载到gdtr寄存器中，将数据段选择子加载到段寄存器中。</p>
+<p>关于属性值，详细信息请参考intel系统编程手册。数据段设置属性值：段存在、特权级0、普通段、数据段、可读写、32位。代码段设置属性值：段存在、特权级0、普通段、代码段、可读取、32位。</p>
+<p>进入内核后第一件工作已经做完了。之后要做的就是操作系统的重要功能之一：中断与异常处理。</p>
+
+        </div>
+
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/os/"># os</a>
+                    
+                        <a href="/tags/kernel/"># kernel</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2024/11/28/bootloader/">bootloader</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© myslqyr | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>
