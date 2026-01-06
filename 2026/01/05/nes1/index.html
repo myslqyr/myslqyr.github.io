@@ -151,7 +151,11 @@
         <div class="post-content">
             <p>由于毕业设计选的是搓一个nes出来，所以在blog里记录一下nes的一些知识避免到时候忘了ww</p>
 <h1 id="NES使用的CPU：6502"><a href="#NES使用的CPU：6502" class="headerlink" title="NES使用的CPU：6502"></a>NES使用的CPU：6502</h1><p>这篇blog主要记录一下NES使用的cpu：6502，及其指令集和对应的微操作。</p>
-<h3 id="cpu-内存映射"><a href="#cpu-内存映射" class="headerlink" title="cpu-内存映射"></a>cpu-内存映射</h3><p>首先要了解一下NES的CPU Memory Map。</p>
+<h3 id="cpu-内存映射"><a href="#cpu-内存映射" class="headerlink" title="cpu-内存映射"></a>cpu-内存映射</h3><p>首先要了解一下NES的CPU Memory Map。<br><img src="/2026/01/05/nes1/1.png" alt="nescpu-内存架构图"></p>
+<p>上图为nes的cpu-内存整体架构图</p>
+<p><img src="/2026/01/05/nes1/2.png" alt="nes内存映射图"></p>
+<p>上图为nes的内存地址映射空间</p>
+<p>可以看出cpu通过三根总线与rom、ram、IO相连，在模拟器实现中，总线相对来说不是必须去模拟出，可以用一些统一的操作函数进行替代。nes内的所有部件都会统一映射到一个内存地址空间中，如图二。NES的地址空间从0x0000到0xFFFF</p>
 
         </div>
 
