@@ -158,7 +158,7 @@
         <div class="post-content">
             <h1 id="填坑：gdt与idt"><a href="#填坑：gdt与idt" class="headerlink" title="填坑：gdt与idt"></a>填坑：gdt与idt</h1><h2 id="GDT表"><a href="#GDT表" class="headerlink" title="GDT表"></a>GDT表</h2><h3 id="GDT表概念（来自维基百科）"><a href="#GDT表概念（来自维基百科）" class="headerlink" title="GDT表概念（来自维基百科）"></a>GDT表概念（来自维基百科）</h3><p>全局描述符表 (GDT) 是一个从 Intel x86-系列处理器 80286 开始用于界定不同内存区域的特征的数据结构。 全局描述表位于内存中。全局描述表的条目描述及规定了不同内存分区的各种特征，包括基地址、大小和访问等特权如可执行和可写等。 在 Intel 的术语中，这些内存区域被称为 段 。</p>
 <p>全局描述表用于内存地址的转换。所有程序的内存访问都需要用到GDT中的有关内存区域即x86内存分段的信息。访问GDT需要使用segment selector和segment offset。处理器使用segment selector（段选择子）为索引查找GDT的条目。当适当的条目找到后，处理器将会做一系列的检查，包括检查segment offset尝试访问区间是否在此内存分段内，代码是否有权限访问此内存分段（检查分级保护域权限）等。为了加速全局描述表的访问，往segment寄存器里载入segment的值会使得GDT的特定条目被读入处理器内部的缓存中。之后的内存访问将会通过缓存进行处理。</p>
-<p>可以看出，GDT在intel x86系列处理器中有着十分重要的地位和作用。中断异常处理、进程管理、内存访问等功能都与这个结构有关。<br><img src="/2026/01/14/gdt_idt/1.jpg" alt="GDT1"><br>GDT的每一项叫段选择子，其结构如下图所示：<br><img src="/2026/01/14/gdt_idt/2.jpg" alt="GDT2"></p>
+<p>可以看出，GDT在intel x86系列处理器中有着十分重要的地位和作用。中断异常处理、进程管理、内存访问等功能都与这个结构有关。<br><img src="/2026/01/14/gdt&idt/1.jpg" alt="GDT1"><br>GDT的每一项叫段选择子，其结构如下图所示：<br><img src="/2026/01/14/gdt&idt/2.jpg" alt="GDT2"></p>
 <h3 id="GDT寻地址过程"><a href="#GDT寻地址过程" class="headerlink" title="GDT寻地址过程"></a>GDT寻地址过程</h3><p>在保护模式下的寻址过程中，gdt起到了十分重要的作用。实模式下地址可以通过段寄存器和段偏移来寻找，但是在保护模式下，段寄存器内存放的数据不再代表“基地址”，而是代表GDT表中某个描述符的索引。例如在保护模式下执行汇编代码mov ds:[si], ax的大致步骤如下：</p>
 <p>1.首先CPU需要查找GDT在内存中位置，GDT的位置从GDTR寄存器中直接获取</p>
 <p>2.然后根据DS寄存器得到目标段描述符的物理地址</p>
