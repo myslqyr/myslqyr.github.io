@@ -13,7 +13,7 @@
 
 
 
-<title>Archives: 2026 | myslqyr&#39;s blog</title>
+<title>syscall | myslqyr&#39;s blog</title>
 
 
 
@@ -124,49 +124,75 @@
     }
 </script>
             <div class="main">
-                <div class="post-wrap archive">
+                <div class="container">
     
     
-        
 
-        
-            <h3>2026</h3>
-        
-
-        <article class="archive-item">
-            <a class="archive-item-link" href="/2026/02/14/syscall/">syscall</a>
-            <span class="archive-item-date">February 14, 2026</span>
-        </article>
     
-        
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">syscall</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">myslqyr</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">February 14, 2026&nbsp;&nbsp;17:55:07</a>
+                        </span>
+                    
+                    
+                        <span class="post-category">
+                    Category:
+                            
+                                <a href="/categories/os/">os</a>
+                            
+                        </span>
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="系统调用"><a href="#系统调用" class="headerlink" title="系统调用"></a>系统调用</h1><h3 id="系统调用门"><a href="#系统调用门" class="headerlink" title="系统调用门"></a>系统调用门</h3><p>由于引入了特权级机制，处于ring0的os内核代码不能被处于ring3的用户进程代码直接访问。用户进程想要获得os内核的功能支持需要通过系统调用（syscall）。应用程序可以通过调用门接口，实现在低特权级的情况下对os提供的接口函数进行调用。调用门由调用门描述符实现，其结构如下图所示：<br><img src="/2026/02/14/syscall/1.png" alt="系统调用门"><br>16-31位代表被调用函数所在的代码段，0-15位代表被调用函数相对于代码段的偏移量。调用门的工作流程与权限检查可以查看intel提供的文档。</p>
+
+        </div>
 
         
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/os/"># os</a>
+                    
+                        <a href="/tags/kernel/"># kernel</a>
+                    
+                        <a href="/tags/syscall/"># syscall</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+            
+            <a class="next" rel="next" href="/2026/01/29/eBPF/">eBPF</a>
+            
+        </section>
 
-        <article class="archive-item">
-            <a class="archive-item-link" href="/2026/01/29/eBPF/">eBPF</a>
-            <span class="archive-item-date">January 29, 2026</span>
-        </article>
-    
-        
 
-        
-
-        <article class="archive-item">
-            <a class="archive-item-link" href="/2026/01/14/gdt&idt/">gdt&amp;idt</a>
-            <span class="archive-item-date">January 14, 2026</span>
-        </article>
-    
-        
-
-        
-
-        <article class="archive-item">
-            <a class="archive-item-link" href="/2026/01/05/nes1/">nes1:6502cpu</a>
-            <span class="archive-item-date">January 5, 2026</span>
-        </article>
-    
-    
+    </article>
 </div>
+
             </div>
             <footer id="footer" class="footer">
     <div class="copyright">
