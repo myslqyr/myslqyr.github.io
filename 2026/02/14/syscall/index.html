@@ -171,6 +171,8 @@
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> _<span class="title">syscall_frame_t</span> &#123;</span></span><br><span class="line">	<span class="type">int</span> eflags;</span><br><span class="line">	<span class="type">int</span> gs, fs, es, ds;</span><br><span class="line">	<span class="type">int</span> edi, esi, ebp, dummy, ebx, edx, ecx, eax;</span><br><span class="line">	<span class="type">int</span> eip, cs;</span><br><span class="line">	<span class="type">int</span> func_id, arg0, arg1, arg2, arg3;</span><br><span class="line">	<span class="type">int</span> esp, ss;</span><br><span class="line">&#125;<span class="type">syscall_frame_t</span>;</span><br></pre></td></tr></table></figure>
 <p>这时候就可以通过系统调用号查找sys_table，sys_table相当于一个函数指针表，每一项都指向了一个syscall的处理函数。找到对应的处理函数时就可以让操作系统处理对应的功能，达到请求操作系统服务的效果。例如msleep对应的内核函数为sys_mslepp,其实现方式如下。</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">sys_msleep</span> <span class="params">(<span class="type">uint32_t</span> ms)</span> &#123;</span><br><span class="line">    <span class="comment">// 至少延时1个tick</span></span><br><span class="line">    <span class="keyword">if</span> (ms &lt; OS_TICK_MS) &#123;</span><br><span class="line">        ms = OS_TICK_MS;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="type">irq_state_t</span> state = irq_enter_protection();</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 从就绪队列移除，加入睡眠队列</span></span><br><span class="line">    task_set_block(task_manager.curr_task);</span><br><span class="line">    task_set_sleep(task_manager.curr_task, (ms + (OS_TICK_MS - <span class="number">1</span>))/ OS_TICK_MS);</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 进行一次调度</span></span><br><span class="line">    task_dispatch();</span><br><span class="line"></span><br><span class="line">    irq_leave_protection(state);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="fork与exec系统调用"><a href="#fork与exec系统调用" class="headerlink" title="fork与exec系统调用"></a>fork与exec系统调用</h3>
         </div>
 
         
@@ -196,6 +198,8 @@
             </div>
         </section>
         <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2026/03/03/hot100/">hot100</a>
             
             
             <a class="next" rel="next" href="/2026/01/29/eBPF/">eBPF</a>

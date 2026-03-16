@@ -209,6 +209,9 @@
 <h4 id="添加ring0和ring3的栈"><a href="#添加ring0和ring3的栈" class="headerlink" title="添加ring0和ring3的栈"></a>添加ring0和ring3的栈</h4><p>添加ring0的栈可以供进程在进入内核态（syscall、irq等情况）下进行使用。</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">task-&gt;tss.esp0 = kernel_stack + MEM_PAGE_SIZE;//栈从高地址开始</span><br></pre></td></tr></table></figure>
 <p>kernel stack 被分配了一页内存，esp0指向了特权级0的栈指针。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>以上可以看出，qemu的内存（物理内存）我们是通过位图进行管理的，在内核中，通过addr_alloc_page函数，位图每分配一个空闲位，该函数就会返回这个位对应的物理页面的起始地址。释放的时候只需将该页面对应的位图位清零即可。</p>
+<p>在物理页面上，内核与进程所占的物理页面没什么两样，内核地址与进程地址的分割，以及页面的访问权限（U&#x2F;S）全部是虚拟地址的概念，我们在逻辑上人为地制造了这些抽象概念来保护虚拟内存和隔离进程。</p>
+<p>虚拟内存上，整个4GB的虚拟地址空间可由进程独占，内核虚拟地址位于进程虚拟地址的上方，进程虚拟地址互相隔离，但是共用内核虚拟地址空间。划分界限由MEMORY_TASK_BASE定义。虚拟内存同样由页面进行管理，采用二级页表模式。memory_create_uvm负责创建进程的初始页表并拷贝内核页表，进程在创建时调用memory_create_map，这个函数会创建虚拟页面到物理页面的映射，如果find_pte函数访问某一个虚拟地址时没有找到对应的物理页面，则会分配一个物理页面给进程。</p>
 
         </div>
 
