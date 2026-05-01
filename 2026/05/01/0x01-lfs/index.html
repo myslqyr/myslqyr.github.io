@@ -19,21 +19,22 @@
   <meta name="author" content="myslqyr">
   <meta name="keywords" content="">
   
-    <meta name="description" content="restart重新部署了一下hexo主题。">
+    <meta name="description" content="0x01: Linux From Scratch本篇blog是基于Linux From Scratch - Version 13.0-systemd的学习过程。 part1:准备工作分区在这一章节中我们的主要目的是给磁盘进行分区并在分区中刷入对应的文件系统。由于笔者的kubuntu没有空闲的磁盘空间，重新分区可能会出现问题，于是就在&#x2F;home搞了块60G的虚拟磁盘进行实验。 1fallo">
 <meta property="og:type" content="article">
-<meta property="og:title" content="0x00:restart">
-<meta property="og:url" content="http://example.com/2026/04/17/0x00-restart/index.html">
+<meta property="og:title" content="0x01:lfs">
+<meta property="og:url" content="http://example.com/2026/05/01/0x01-lfs/index.html">
 <meta property="og:site_name" content="myslqyr&#39;s blog">
-<meta property="og:description" content="restart重新部署了一下hexo主题。">
+<meta property="og:description" content="0x01: Linux From Scratch本篇blog是基于Linux From Scratch - Version 13.0-systemd的学习过程。 part1:准备工作分区在这一章节中我们的主要目的是给磁盘进行分区并在分区中刷入对应的文件系统。由于笔者的kubuntu没有空闲的磁盘空间，重新分区可能会出现问题，于是就在&#x2F;home搞了块60G的虚拟磁盘进行实验。 1fallo">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2026-04-17T05:56:27.000Z">
-<meta property="article:modified_time" content="2026-04-17T06:13:15.609Z">
+<meta property="article:published_time" content="2026-05-01T08:38:13.000Z">
+<meta property="article:modified_time" content="2026-05-01T10:13:17.501Z">
 <meta property="article:author" content="myslqyr">
+<meta property="article:tag" content="lfs">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>0x00:restart - myslqyr&#39;s blog</title>
+  <title>0x01:lfs - myslqyr&#39;s blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -328,7 +329,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="0x00:restart"></span>
+            <span id="subtitle" data-typed-text="0x01:lfs"></span>
           
         </div>
 
@@ -339,8 +340,8 @@
     
       <span class="post-meta">
         <i class="iconfont icon-date-fill" aria-hidden="true"></i>
-        <time datetime="2026-04-17 13:56" pubdate>
-          2026年4月17日 下午
+        <time datetime="2026-05-01 16:38" pubdate>
+          2026年5月1日 下午
         </time>
       </span>
     
@@ -351,7 +352,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          21 字
+          2.2k 字
         
       </span>
     
@@ -362,7 +363,7 @@
         
         
         
-          1 分钟
+          18 分钟
         
       </span>
     
@@ -401,12 +402,40 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">0x00:restart</h1>
+            <h1 id="seo-header">0x01:lfs</h1>
             
             
               <div class="markdown-body">
                 
-                <h2 id="restart"><a href="#restart" class="headerlink" title="restart"></a>restart</h2><p>重新部署了一下hexo主题。</p>
+                <h1 id="0x01-Linux-From-Scratch"><a href="#0x01-Linux-From-Scratch" class="headerlink" title="0x01: Linux From Scratch"></a>0x01: Linux From Scratch</h1><p>本篇blog是基于Linux From Scratch - Version 13.0-systemd的学习过程。</p>
+<h2 id="part1-准备工作"><a href="#part1-准备工作" class="headerlink" title="part1:准备工作"></a>part1:准备工作</h2><h3 id="分区"><a href="#分区" class="headerlink" title="分区"></a>分区</h3><p>在这一章节中我们的主要目的是给磁盘进行分区并在分区中刷入对应的文件系统。由于笔者的kubuntu没有空闲的磁盘空间，重新分区可能会出现问题，于是就在&#x2F;home搞了块60G的虚拟磁盘进行实验。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">fallocate -l 60G ./lfs_disk.img<br></code></pre></td></tr></table></figure>
+<p>分配好后是刷分区，使用cfdisk命令，这个命令提供了一个简单的图形化的页面对磁盘进行分区操作。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">cfdisk ./lfs_disk.img<br></code></pre></td></tr></table></figure>
+<p>当然也可以使用fdisk进行纯命令行的操作。分区后我们可以使用</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">fdisk -l ./lfs_disk.img<br></code></pre></td></tr></table></figure>
+<p>查看分区情况，，笔者分了0.5G的EFI，4G的swap以及55.5G的&#x2F;，如下所示：</p>
+<figure class="highlight tap"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs tap">myslqyr@myslqyr-ubuntu ~/c/lfs&gt; fdisk -l ./lfs_disk.img<br>Disk ./lfs_disk.img:<span class="hljs-number"> 60 </span>GiB,<span class="hljs-number"> 64424509440 </span>bytes,<span class="hljs-number"> 125829120 </span>sectors<br>Units: sectors of<span class="hljs-number"> 1 </span>*<span class="hljs-number"> 512 </span>=<span class="hljs-number"> 512 </span>bytes<br>Sector size (logical/physical):<span class="hljs-number"> 512 </span>bytes /<span class="hljs-number"> 512 </span>bytes<br>I/O size (minimum/optimal):<span class="hljs-number"> 512 </span>bytes /<span class="hljs-number"> 512 </span>bytes<br>Disklabel type: gpt<br>Disk identifier: BF82A038-B3EE-4AA2-82D7-0889E36ED794<br><br>Device            Start       End   Sectors  Size Type<br>./lfs_disk.img1   <span class="hljs-number"> 2048 </span> <span class="hljs-number"> 1050623 </span> <span class="hljs-number"> 1048576 </span> 512M EFI System<br>./lfs_disk.img2<span class="hljs-number"> 1050624 </span> <span class="hljs-number"> 9439231 </span> <span class="hljs-number"> 8388608 </span>   4G Linux swap<br>./lfs_disk.img3<span class="hljs-number"> 9439232 </span>125827071<span class="hljs-number"> 116387840 </span>55.5G Linux root (x86-64)<br></code></pre></td></tr></table></figure>
+<p>由于我们没有在物理硬盘上建立分区，所以之后是让宿主机识别到这部分。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> losetup -fP ./lfs_disk.img<br></code></pre></td></tr></table></figure>
+<p>这个命令将lfs_disk映射到了我电脑上的loop19。命令解释参考菜鸟教程：<em>Linux losetup 命令用于设置循环设备。<br>循环设备可把文件虚拟成区块设备，籍以模拟整个文件系统，让用户得以将其视为硬盘驱动器，光驱或软驱等设备，并挂入当作目录来使用。</em><br>此操作在电脑重启后需要重新执行。之后可以使用lsblk查看磁盘情况。</p>
+<figure class="highlight tap"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs tap">&gt; lsblk<br>......<br>loop19        7:19  <span class="hljs-number"> 0 </span>   60G <span class="hljs-number"> 0 </span>loop <br>├─loop19p1  259:6   <span class="hljs-number"> 0 </span>  512M <span class="hljs-number"> 0 </span>part <br>├─loop19p2  259:7   <span class="hljs-number"> 0 </span>    4G <span class="hljs-number"> 0 </span>part <br>└─loop19p3  259:8   <span class="hljs-number"> 0 </span> 55.5G <span class="hljs-number"> 0 </span>part <br></code></pre></td></tr></table></figure>
+<h3 id="刷入文件系统"><a href="#刷入文件系统" class="headerlink" title="刷入文件系统"></a>刷入文件系统</h3><p>然后是给这些分区刷入文件系统，EFI使用FAT32，swap使用swap格式，根分区使用ext4。刷入的文件系统和分区信息在重启电脑后不会消失。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> mkfs.vfat -F 32 /dev/loop19p1<br><span class="hljs-built_in">sudo</span> mkfs.vfat -F 32 /dev/loop19p1<br><span class="hljs-built_in">sudo</span> mkfs.vfat -F 32 /dev/loop19p1<br></code></pre></td></tr></table></figure>
+
+<h3 id="设置环境变量和umusk"><a href="#设置环境变量和umusk" class="headerlink" title="设置环境变量和umusk"></a>设置环境变量和umusk</h3><p>我们需要执行下面两条指令。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">export</span> LFS=/mnt/lfs<br><span class="hljs-built_in">umask</span> 022<br></code></pre></td></tr></table></figure>
+<p>umask是设置了权限掩码，保证755或644的权限，避免出现问题。设置好后可以测试一下，如果输出结果不对就要重新输入。需要注意的是上述操作在电脑重启时会刷新，需要重新搞一下。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><code class="hljs bash">myslqyr@myslqyr-ubuntu ~/c/lfs&gt; <span class="hljs-built_in">echo</span> <span class="hljs-variable">$LFS</span><br>/mnt/lfs<br>myslqyr@myslqyr-ubuntu ~/c/lfs&gt; <span class="hljs-built_in">umask</span><br>0022<br></code></pre></td></tr></table></figure>
+<h3 id="挂载"><a href="#挂载" class="headerlink" title="挂载"></a>挂载</h3><p>我们需要将虚拟硬盘挂在到&#x2F;mnt&#x2F;lfs中。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> <span class="hljs-built_in">mkdir</span> -pv <span class="hljs-variable">$LFS</span><br><span class="hljs-built_in">sudo</span> mount -v -t ext4 /dev/loop19p3 <span class="hljs-variable">$LFS</span><br></code></pre></td></tr></table></figure>
+<p>挂载后，统一设置根目录权限为755防止不同发行版为mkfs使用了不同的配置。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> <span class="hljs-built_in">chown</span> root:root <span class="hljs-variable">$LFS</span><br><span class="hljs-built_in">sudo</span> <span class="hljs-built_in">chmod</span> 755 <span class="hljs-variable">$LFS</span><br></code></pre></td></tr></table></figure>
+<p>我们还要把交换空间临时增加到宿主机中，命令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> /sbin/swapon -v /dev/loop19p2<br></code></pre></td></tr></table></figure>
+<p>在挂载这一小节中的所有操作重启电脑后都会失效，所以可以编写一个脚本统一保存这些操作，关于环境变量和umask最好是要保存到bashrc中，因为简单来说在终端中进行环境变量的配置操作不是全局的。笔者用的shell是fish,为了避免可能发生的问题换回bash了。重启电脑，在bash中运行好脚本后，可以看到正确的挂载信息。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">myslqyr@myslqyr-ubuntu:~$ mount | grep <span class="hljs-variable">$LFS</span><br>/dev/loop19p3 on /mnt/lfs <span class="hljs-built_in">type</span> ext4 (rw,relatime)<br></code></pre></td></tr></table></figure>
+<p>由于我们使用的是虚拟硬盘，每次都要重新映射，所以不方便采用书中修改&#x2F;etc&#x2F;fstab文件在重启时自动挂载的操作。</p>
 
                 
               </div>
@@ -416,6 +445,13 @@
               <div class="post-metas my-3">
   
   
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/lfs/" class="print-no-link">#lfs</a>
+      
+    </div>
+  
 </div>
 
 
@@ -424,8 +460,8 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>0x00:restart</div>
-      <div>http://example.com/2026/04/17/0x00-restart/</div>
+      <div>0x01:lfs</div>
+      <div>http://example.com/2026/05/01/0x01-lfs/</div>
     </div>
     <div class="license-meta">
       
@@ -437,7 +473,7 @@
       
         <div class="license-meta-item license-meta-date">
           <div>发布于</div>
-          <div>2026年4月17日</div>
+          <div>2026年5月1日</div>
         </div>
       
       
@@ -469,15 +505,15 @@
                   <article class="post-prev col-6">
                     
                     
-                      <a href="/2026/05/01/0x01-lfs/" title="0x01:lfs">
-                        <i class="iconfont icon-arrowleft"></i>
-                        <span class="hidden-mobile">0x01:lfs</span>
-                        <span class="visible-mobile">上一篇</span>
-                      </a>
-                    
                   </article>
                   <article class="post-next col-6">
                     
+                    
+                      <a href="/2026/04/17/0x00-restart/" title="0x00:restart">
+                        <span class="hidden-mobile">0x00:restart</span>
+                        <span class="visible-mobile">下一篇</span>
+                        <i class="iconfont icon-arrowright"></i>
+                      </a>
                     
                   </article>
                 </div>
