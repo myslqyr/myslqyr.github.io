@@ -19,21 +19,22 @@
   <meta name="author" content="myslqyr">
   <meta name="keywords" content="">
   
-    <meta name="description" content="Linux内核模块内核模块的一些基本概念内核模块是实现某一个功能的一段内核代码，这段代码可以在内核的运行过程中动态加载到内核，从而增加内核功能。这段代码可以单独编译，不用对整个内核重新进行编译。内核模块不能独立运行， 在运行时它被链接到内核作为内核的一部分在内核空间运行。编译好的模块是一个elf文件，后缀名为.ko。 一个简单的内核模块示例如下： 1234567891011121314151617">
+    <meta name="description" content="Linux内核模块内核模块的一些基本概念内核模块是实现某一个功能的一段内核代码，这段代码可以在内核的运行过程中动态加载到内核，从而增加内核功能。这段代码可以单独编译，不用对整个内核重新进行编译。内核模块不能独立运行， 在运行时它被链接到内核作为内核的一部分在内核空间运行。编译好的模块在本质上是一个elf文件，后缀名为.ko。 一个简单的内核模块示例如下： 123456789101112131415">
 <meta property="og:type" content="article">
-<meta property="og:title" content="0x02-linux module">
+<meta property="og:title" content="0x02:linux module">
 <meta property="og:url" content="http://example.com/2026/05/13/0x02-linux%20module/index.html">
 <meta property="og:site_name" content="myslqyr&#39;s blog">
-<meta property="og:description" content="Linux内核模块内核模块的一些基本概念内核模块是实现某一个功能的一段内核代码，这段代码可以在内核的运行过程中动态加载到内核，从而增加内核功能。这段代码可以单独编译，不用对整个内核重新进行编译。内核模块不能独立运行， 在运行时它被链接到内核作为内核的一部分在内核空间运行。编译好的模块是一个elf文件，后缀名为.ko。 一个简单的内核模块示例如下： 1234567891011121314151617">
+<meta property="og:description" content="Linux内核模块内核模块的一些基本概念内核模块是实现某一个功能的一段内核代码，这段代码可以在内核的运行过程中动态加载到内核，从而增加内核功能。这段代码可以单独编译，不用对整个内核重新进行编译。内核模块不能独立运行， 在运行时它被链接到内核作为内核的一部分在内核空间运行。编译好的模块在本质上是一个elf文件，后缀名为.ko。 一个简单的内核模块示例如下： 123456789101112131415">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-05-13T12:11:55.000Z">
-<meta property="article:modified_time" content="2026-05-14T15:37:25.473Z">
+<meta property="article:modified_time" content="2026-05-21T14:03:19.331Z">
 <meta property="article:author" content="myslqyr">
+<meta property="article:tag" content="linux module">
 <meta name="twitter:card" content="summary_large_image">
   
   
   
-  <title>0x02-linux module - myslqyr&#39;s blog</title>
+  <title>0x02:linux module - myslqyr&#39;s blog</title>
 
   <link  rel="stylesheet" href="https://lib.baomitu.com/twitter-bootstrap/4.6.1/css/bootstrap.min.css" />
 
@@ -328,7 +329,7 @@
       <div class="banner-text text-center fade-in-up">
         <div class="h2">
           
-            <span id="subtitle" data-typed-text="0x02-linux module"></span>
+            <span id="subtitle" data-typed-text="0x02:linux module"></span>
           
         </div>
 
@@ -351,7 +352,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          1.2k 字
+          2.2k 字
         
       </span>
     
@@ -362,7 +363,7 @@
         
         
         
-          11 分钟
+          19 分钟
         
       </span>
     
@@ -401,20 +402,28 @@
       <div class="container nopadding-x-md" id="board-ctn">
         <div id="board">
           <article class="post-content mx-auto">
-            <h1 id="seo-header">0x02-linux module</h1>
+            <h1 id="seo-header">0x02:linux module</h1>
             
             
               <div class="markdown-body">
                 
-                <h2 id="Linux内核模块"><a href="#Linux内核模块" class="headerlink" title="Linux内核模块"></a>Linux内核模块</h2><h3 id="内核模块的一些基本概念"><a href="#内核模块的一些基本概念" class="headerlink" title="内核模块的一些基本概念"></a>内核模块的一些基本概念</h3><p>内核模块是实现某一个功能的一段内核代码，这段代码可以在内核的运行过程中动态加载到内核，从而增加内核功能。这段代码可以单独编译，不用对整个内核重新进行编译。内核模块不能独立运行， 在运行时它被链接到内核作为内核的一部分在内核空间运行。编译好的模块是一个elf文件，后缀名为.ko。</p>
+                <h2 id="Linux内核模块"><a href="#Linux内核模块" class="headerlink" title="Linux内核模块"></a>Linux内核模块</h2><h3 id="内核模块的一些基本概念"><a href="#内核模块的一些基本概念" class="headerlink" title="内核模块的一些基本概念"></a>内核模块的一些基本概念</h3><p>内核模块是实现某一个功能的一段内核代码，这段代码可以在内核的运行过程中动态加载到内核，从而增加内核功能。这段代码可以单独编译，不用对整个内核重新进行编译。内核模块不能独立运行， 在运行时它被链接到内核作为内核的一部分在内核空间运行。编译好的模块在本质上是一个elf文件，后缀名为.ko。</p>
 <p>一个简单的内核模块示例如下：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;linux/init.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;linux/module.h&gt;</span></span><br><span class="hljs-meta">#<span class="hljs-keyword">include</span> <span class="hljs-string">&lt;linux/kernel.h&gt;</span></span><br><br>MODULE_LICENSE(<span class="hljs-string">&quot;GPL&quot;</span>);<br>MODULE_AUTHOR(<span class="hljs-string">&quot;myslqyr&quot;</span>);<br>MODULE_DESCRIPTION(<span class="hljs-string">&quot;A simple hello world kernel module&quot;</span>);<br>MODULE_VERSION(<span class="hljs-string">&quot;1.0&quot;</span>);<br><br><span class="hljs-type">static</span> <span class="hljs-type">int</span> __init <span class="hljs-title function_">hello_init</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>    printk(KERN_INFO <span class="hljs-string">&quot;Hello World kernel module loaded.\n&quot;</span>);<br>    <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;<br>&#125;<br><br><span class="hljs-type">static</span> <span class="hljs-type">void</span> __exit <span class="hljs-title function_">hello_exit</span><span class="hljs-params">(<span class="hljs-type">void</span>)</span><br>&#123;<br>    printk(KERN_INFO <span class="hljs-string">&quot;Hello World kernel module unloaded.\n&quot;</span>);<br>&#125;<br><br>module_init(hello_init);<br>module_exit(hello_exit);<br></code></pre></td></tr></table></figure>
 <p>makefile如下：</p>
 <figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs makefile">obj-m += hello.o<br><br>DIR := /lib/modules/<span class="hljs-variable">$(<span class="hljs-built_in">shell</span> uname -r)</span>/build<br>PWD  := <span class="hljs-variable">$(<span class="hljs-built_in">shell</span> pwd)</span><br><br><span class="hljs-section">all:</span><br>	make -C <span class="hljs-variable">$(DIR)</span> M=<span class="hljs-variable">$(PWD)</span> modules<br><br><span class="hljs-section">clean:</span><br>	make -C <span class="hljs-variable">$(DIR)</span> M=<span class="hljs-variable">$(PWD)</span> clean <br></code></pre></td></tr></table></figure>
 <p>sudo insmod hello.ko可以加载模块，sudo rmmod hello卸载模块。</p>
-<h3 id="内核模块签名"><a href="#内核模块签名" class="headerlink" title="内核模块签名"></a>内核模块签名</h3><p>大多数发行版在编译内核时没有添加CONFIG_MODULE_SIG_FORCE这个内核配置项，这个配置项用于检查内核模块的签名。如果内核模块的签名无效，内核将拒绝加载该模块。大部分的电脑也默认没有使用uefi security boot,开启security boot也会强制模块签名。</p>
+<h3 id="内核模块签名"><a href="#内核模块签名" class="headerlink" title="内核模块签名"></a>内核模块签名</h3><p>大多数发行版在编译内核时没有添加CONFIG_MODULE_SIG_FORCE这个内核配置项，这个配置项用于检查内核模块的签名。如果内核模块的签名无效，内核将拒绝加载该模块。大部分的电脑也默认没有使用uefi security boot,开启security boot也会强制模块签名。当强制开启内核模块签名时，会拒绝加载没有签名或者签名预期值不符的模块。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cat</span> /boot/config-$(<span class="hljs-built_in">uname</span> -r) | grep MODULE_SIG<br>...<br>CONFIG_MODULE_SIG=y<br><span class="hljs-comment"># CONFIG_MODULE_SIG_FORCE is not set</span><br>...<br>mokutil --sb-state<br>SecureBoot disabled<br></code></pre></td></tr></table></figure>
-<h3 id="内核模块签名的流程"><a href="#内核模块签名的流程" class="headerlink" title="内核模块签名的流程"></a>内核模块签名的流程</h3>
+<h3 id="内核模块签名的流程"><a href="#内核模块签名的流程" class="headerlink" title="内核模块签名的流程"></a>内核模块签名的流程</h3><p>首先生成一对公钥和私钥。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><code class="hljs bash">openssl req -new -x509 -newkey rsa:2048 \ <span class="hljs-comment">#生成自签名证书 -new：创建新请求 -x509：输出 X.509 格式证书  -newkey：生成新密钥对  rsa:2048：使用rsa算法密钥长度2048bit</span><br>-keyout MOK.key \<br>-out MOK.crt \<br>-nodes \ <span class="hljs-comment">#生成不加密私钥</span><br>-days 36500 \<br>-subj <span class="hljs-string">&quot;/CN=My Kernel Module Signing/&quot;</span><br></code></pre></td></tr></table></figure>
+<p>然后对hello.ko进行签名。签名工具使用的是&#x2F;usr&#x2F;src&#x2F;linux-headers-$(uname -r)&#x2F;scripts&#x2F;sign-file。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><code class="hljs bash">/usr/src/linux-headers-$(<span class="hljs-built_in">uname</span> -r)/scripts/sign-file \<br>sha256 \<br>MOK.key \<br>MOK.crt \<br>hello.ko<br></code></pre></td></tr></table></figure>
+<p>这时候我们运行modinfo hello.ko可以看到hello.ko带上了签名。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><code class="hljs bash">modinfo hello.ko<br>filename:       ?<br>version:        1.0<br>description:    A simple hello world kernel module<br>author:         myslqyr<br>license:        GPL<br>srcversion:     D98FC66A28194B60CF68194<br>depends:        <br>name:           hello<br>retpoline:      Y<br>vermagic:       6.14.0-33-generic SMP preempt mod_unload modversions <br>sig_id:         PKCS#7<br>signer:         My Kernel Module Signing<br>sig_key:        2E:65:EA:52:3B:75:...<br>sig_hashalgo:   sha256<br>signature:      13:87:A6:A7:6C:32:...<br></code></pre></td></tr></table></figure>
+<p>之后要给内核导入公钥。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><code class="hljs bash">openssl x509 -<span class="hljs-keyword">in</span> MOK.crt -outform DER -out MOK.der <span class="hljs-comment">#将公钥从PEM格式转换成DER格式</span><br><span class="hljs-built_in">sudo</span> mokutil --import MOK.der <span class="hljs-comment">#将公钥导入内核（应该是先写入uefi）</span><br></code></pre></td></tr></table></figure>
+
                 
               </div>
             
@@ -422,6 +431,34 @@
             <div>
               <div class="post-metas my-3">
   
+    <div class="post-meta mr-3 d-flex align-items-center">
+      <i class="iconfont icon-category"></i>
+      
+
+<span class="category-chains">
+  
+  
+    
+      <span class="category-chain">
+        
+  <a href="/categories/linux/" class="category-chain-item">linux</a>
+  
+  
+
+      </span>
+    
+  
+</span>
+
+    </div>
+  
+  
+    <div class="post-meta">
+      <i class="iconfont icon-tags"></i>
+      
+        <a href="/tags/linux-module/" class="print-no-link">#linux module</a>
+      
+    </div>
   
 </div>
 
@@ -431,7 +468,7 @@
 
   <div class="license-box my-3">
     <div class="license-title">
-      <div>0x02-linux module</div>
+      <div>0x02:linux module</div>
       <div>http://example.com/2026/05/13/0x02-linux module/</div>
     </div>
     <div class="license-meta">
@@ -475,6 +512,12 @@
                 <div class="post-prevnext my-3">
                   <article class="post-prev col-6">
                     
+                    
+                      <a href="/2026/05/21/0x03-elf/" title="0x03:elf">
+                        <i class="iconfont icon-arrowleft"></i>
+                        <span class="hidden-mobile">0x03:elf</span>
+                        <span class="visible-mobile">上一篇</span>
+                      </a>
                     
                   </article>
                   <article class="post-next col-6">
