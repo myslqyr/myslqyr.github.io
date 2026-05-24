@@ -27,7 +27,7 @@
 <meta property="og:description" content="ELF文件全名为Executable and Linking Format files，即可执行与可链接格式文件，用于可执行文件、目标代码、共享库、可重定位文件、核心转储等类型的文件。 下面以64位ELF文件为例。 ELF文件结构ELF文件由ELF头部、程序头部表或节头部表（或两者）组成。ELF 头部位于文件的零偏移处，程序头部表和节头部表在文件中的偏移量在 ELF 头部中定义。这两个表格描述了文">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-05-20T13:59:32.000Z">
-<meta property="article:modified_time" content="2026-05-22T07:18:29.521Z">
+<meta property="article:modified_time" content="2026-05-24T08:25:54.380Z">
 <meta property="article:author" content="myslqyr">
 <meta property="article:tag" content="elf">
 <meta name="twitter:card" content="summary_large_image">
@@ -352,7 +352,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          2k 字
+          4.5k 字
         
       </span>
     
@@ -363,7 +363,7 @@
         
         
         
-          17 分钟
+          38 分钟
         
       </span>
     
@@ -481,7 +481,155 @@ ET_CORE         A core file.
 <h3 id="e-shentsize"><a href="#e-shentsize" class="headerlink" title="e_shentsize"></a>e_shentsize</h3><p>节头部表中每个条目的大小（字节）。每个条目大小都相等。 </p>
 <h3 id="e-shnum"><a href="#e-shnum" class="headerlink" title="e_shnum"></a>e_shnum</h3><p>节头部表中的条目数。若 ≥ SHN_LORESERVE (0xff00)，则此处为 0，实际数目在初始节头部的 sh_size 中。</p>
 <h3 id="e-shstrndx"><a href="#e-shstrndx" class="headerlink" title="e_shstrndx"></a>e_shstrndx</h3><p>节名字符串表所在节在节头部表中的索引。若 ≥ SHN_LORESERVE，则此处为 SHN_XINDEX (0xffff)，实际索引在初始节头部的 sh_link 中。</p>
-<h2 id="程序头部（Phdr）"><a href="#程序头部（Phdr）" class="headerlink" title="程序头部（Phdr）"></a>程序头部（Phdr）</h2>
+<h2 id="程序头部（Phdr）"><a href="#程序头部（Phdr）" class="headerlink" title="程序头部（Phdr）"></a>程序头部（Phdr）</h2><p>程序头部表是一个结构体数组，每一项描述一个段（segment）。仅对可执行文件和共享对象有意义。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> &#123;</span><br>    <span class="hljs-type">uint32_t</span> p_type;<br>    <span class="hljs-type">uint32_t</span> p_flags;<br>    Elf64_Off p_offset;<br>    Elf64_Addr p_vaddr;<br>    Elf64_Addr p_paddr;<br>    <span class="hljs-type">uint64_t</span> p_filesz;<br>    <span class="hljs-type">uint64_t</span> p_memsz;<br>    <span class="hljs-type">uint64_t</span> p_align;<br>&#125; Elf64_Phdr;<br></code></pre></td></tr></table></figure>
+
+<h3 id="p-type"><a href="#p-type" class="headerlink" title="p_type"></a>p_type</h3><p>段类型：</p>
+<pre><code class="hljs">PT_NULL：未使用
+
+PT_LOAD：可加载段
+
+PT_DYNAMIC：动态链接信息
+
+PT_INTERP：解释器路径
+
+PT_NOTE：注释信息
+
+PT_SHLIB：保留
+
+PT_PHDR：程序头部自身
+
+PT_LOPROC / PT_HIPROC：处理器专用
+
+PT_GNU_STACK：GNU 扩展，控制栈状态
+</code></pre>
+<h3 id="p-offset"><a href="#p-offset" class="headerlink" title="p_offset"></a>p_offset</h3><p>段在文件中的偏移</p>
+<h3 id="p-vaddr"><a href="#p-vaddr" class="headerlink" title="p_vaddr"></a>p_vaddr</h3><p>段在内存中的虚拟地址</p>
+<h3 id="p-paddr"><a href="#p-paddr" class="headerlink" title="p_paddr"></a>p_paddr</h3><p>物理地址（通常未使用）,该字段仅用于物理地址寻址相关的系统中。</p>
+<h3 id="p-filesz"><a href="#p-filesz" class="headerlink" title="p_filesz"></a>p_filesz</h3><p>段在文件中的大小</p>
+<h3 id="p-memsz"><a href="#p-memsz" class="headerlink" title="p_memsz"></a>p_memsz</h3><p>段在内存中的大小</p>
+<h3 id="p-flags"><a href="#p-flags" class="headerlink" title="p_flags"></a>p_flags</h3><p>段标志：</p>
+<pre><code class="hljs">PF_X：可执行
+
+PF_W：可写
+
+PF_R：可读
+</code></pre>
+<h3 id="p-align"><a href="#p-align" class="headerlink" title="p_align"></a>p_align</h3><p>段对齐方式。该成员保存了段在内存和文件中对齐所依据的值。可加载的进程段必须使 p_vaddr 和 p_offset 在模页大小下同余。值为 0 或 1 表示不需要对齐。否则，p_align 应为 2 的正整数次幂，且 p_vaddr 应等于 p_offset 模 p_align。</p>
+<h2 id="节头部-Shdr"><a href="#节头部-Shdr" class="headerlink" title="节头部 Shdr"></a>节头部 Shdr</h2><p>节头部的结构体定义如下。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> &#123;</span><br>    <span class="hljs-type">uint32_t</span> sh_name;<br>    <span class="hljs-type">uint32_t</span> sh_type;<br>    <span class="hljs-type">uint64_t</span> sh_flags;<br>    Elf64_Addr sh_addr;<br>    Elf64_Off sh_offset;<br>    <span class="hljs-type">uint64_t</span> sh_size;<br>    <span class="hljs-type">uint32_t</span> sh_link;<br>    <span class="hljs-type">uint32_t</span> sh_info;<br>    <span class="hljs-type">uint64_t</span> sh_addralign;<br>    <span class="hljs-type">uint64_t</span> sh_entsize;<br>&#125; Elf64_Shdr;<br></code></pre></td></tr></table></figure>
+<h3 id="sh-name"><a href="#sh-name" class="headerlink" title="sh_name"></a>sh_name</h3><p>节名在节头部字符串表中的索引</p>
+<h3 id="sh-type"><a href="#sh-type" class="headerlink" title="sh_type"></a>sh_type</h3><p>节类型：</p>
+<pre><code class="hljs">SHT_NULL：无效
+
+SHT_PROGBITS：程序定义的数据
+
+SHT_SYMTAB：符号表
+
+SHT_STRTAB：字符串表
+
+SHT_RELA：带加数的重定位表
+
+SHT_HASH：哈希表
+
+SHT_DYNAMIC：动态链接信息
+
+SHT_NOTE：注释
+
+SHT_NOBITS：无文件内容（如 .bss）
+
+SHT_REL：无加数的重定位
+
+SHT_DYNSYM：动态符号表
+
+SHT_LOPROC / SHT_HIPROC：处理器专用
+</code></pre>
+<h3 id="sh-flags"><a href="#sh-flags" class="headerlink" title="sh_flags"></a>sh_flags</h3><p>节标志：</p>
+<pre><code class="hljs">SHF_WRITE：可写
+
+SHF_ALLOC：运行时占用内存
+
+SHF_EXECINSTR：包含可执行指令
+
+SHF_MASKPROC：处理器专用
+</code></pre>
+<h3 id="sh-addr"><a href="#sh-addr" class="headerlink" title="sh_addr"></a>sh_addr</h3><p>如果该段出现在进程的内存映像中，则该成员保存段第一个字节应处的地址。否则为 0</p>
+<h3 id="sh-offset"><a href="#sh-offset" class="headerlink" title="sh_offset"></a>sh_offset</h3><p>保存了从文件开头到段第一个字节的偏移字节数</p>
+<h3 id="sh-size"><a href="#sh-size" class="headerlink" title="sh_size"></a>sh_size</h3><p>节大小，以字节为单位保存</p>
+<h3 id="sh-link、sh-info"><a href="#sh-link、sh-info" class="headerlink" title="sh_link、sh_info"></a>sh_link、sh_info</h3><p>链接信息，含义依赖节类型</p>
+<h3 id="sh-addralign"><a href="#sh-addralign" class="headerlink" title="sh_addralign"></a>sh_addralign</h3><p>地址对齐要求</p>
+<h3 id="sh-entsize"><a href="#sh-entsize" class="headerlink" title="sh_entsize"></a>sh_entsize</h3><p>表中条目大小（如符号表）</p>
+<h3 id="常见节类型"><a href="#常见节类型" class="headerlink" title="常见节类型"></a>常见节类型</h3><pre><code class="hljs">.bss：未初始化数据（SHT_NOBITS）
+
+.comment：版本控制信息
+
+.ctors / .dtors：C++ 构造/析构函数指针
+
+.data / .data1：已初始化数据
+
+.debug、.line：调试信息
+
+.dynamic：动态链接信息
+
+.dynstr：动态链接字符串表
+
+.dynsym：动态符号表
+
+.fini：进程终止代码
+
+.init：进程初始化代码
+
+.got：全局偏移表
+
+.hash：符号哈希表
+
+.interp：解释器路径
+
+.note、.note.ABI-tag、.note.gnu.build-id、.note.GNU-stack 等
+
+.plt：过程链接表
+
+.rel* / .rela*：重定位信息
+
+.rodata / .rodata1：只读数据
+
+.shstrtab：节名字符串表
+
+.strtab：字符串表
+
+.symtab：符号表
+
+.text：可执行指令
+</code></pre>
+<h2 id="字符串表与符号表"><a href="#字符串表与符号表" class="headerlink" title="字符串表与符号表"></a>字符串表与符号表</h2><p>字符串表节存放以空字符结尾的字符序列，通常称为字符串。符号表保存了定位和重定位程序符号定义及符号引用所需的信息。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> &#123;</span><br>    <span class="hljs-type">uint32_t</span>      st_name;<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> st_info;<br>    <span class="hljs-type">unsigned</span> <span class="hljs-type">char</span> st_other;<br>    <span class="hljs-type">uint16_t</span>      st_shndx;<br>    Elf64_Addr    st_value;<br>    <span class="hljs-type">uint64_t</span>      st_size;<br>    &#125; Elf64_Sym;<br></code></pre></td></tr></table></figure>
+<p>字段含义如下：</p>
+<pre><code class="hljs">st_name：名称索引
+
+st_value：符号值
+
+st_size：大小
+
+st_info：类型和绑定（STT_*、STB_*）
+
+    类型：STT_NOTYPE、STT_OBJECT、STT_FUNC、STT_SECTION、STT_FILE
+
+    绑定：STB_LOCAL、STB_GLOBAL、STB_WEAK
+
+st_other：可见性（STV_DEFAULT、STV_INTERNAL、STV_HIDDEN、STV_PROTECTED）
+
+st_shndx：所在节索引
+</code></pre>
+<h2 id="重定位条目"><a href="#重定位条目" class="headerlink" title="重定位条目"></a>重定位条目</h2><p>重定位是将符号引用与符号定义连接起来的过程。 可重定位文件必须包含描述如何修改其节内容的信息，从而使得可执行文件和共享目标文件能够为进程的程序映像保存正确的信息。重定位条目就是这些数据。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><code class="hljs C"><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> &#123;</span><br>    Elf64_Addr r_offset;<br>    <span class="hljs-type">uint64_t</span> r_info;<br>&#125; Elf64_Rel;<br><br><span class="hljs-keyword">typedef</span> <span class="hljs-class"><span class="hljs-keyword">struct</span> &#123;</span><br>    Elf64_Addr r_offset;<br>    <span class="hljs-type">uint64_t</span> r_info;<br>    <span class="hljs-type">int64_t</span> r_addend;<br>&#125; Elf64_Rela;<br></code></pre></td></tr></table></figure>
+<p>参数含义：</p>
+<pre><code class="hljs">r_offset：重定位位置
+
+r_info：符号表索引 + 重定位类型
+
+r_addend：加数（仅 Rela）
+</code></pre>
+<h2 id="动态标签"><a href="#动态标签" class="headerlink" title="动态标签"></a>动态标签</h2><h2 id="注释"><a href="#注释" class="headerlink" title="注释"></a>注释</h2>
                 
               </div>
             
