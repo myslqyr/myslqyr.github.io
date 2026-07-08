@@ -27,7 +27,7 @@
 <meta property="og:description" content="内核启动流程点一下开机键，为什么电脑就开机了？本篇文章的目标是从开机键开始，分析整个内核启动的过程。 UEFIUEFI全名为Unified Extensible Firmware Interface，即统一可扩展固件接口，UEFI是现代的BIOS的替代品。现代计算机中，UEFI大体有如下几个作用。 1.硬件初始化。UEFI会初始化CPU、内存、设备等硬件使其进入可用状态。 2.上电自检。 3.提供">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-06-10T08:14:36.000Z">
-<meta property="article:modified_time" content="2026-06-10T14:13:25.570Z">
+<meta property="article:modified_time" content="2026-06-14T11:00:02.193Z">
 <meta property="article:author" content="myslqyr">
 <meta name="twitter:card" content="summary_large_image">
   
@@ -351,7 +351,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          527 字
+          741 字
         
       </span>
     
@@ -362,7 +362,7 @@
         
         
         
-          5 分钟
+          7 分钟
         
       </span>
     
@@ -413,7 +413,8 @@
 <p>3.提供EFI服务。</p>
 <p>UEFI不会运行在16位的实模式下，它是一个64位的程序。在 BDS（启动设备选择）阶段，UEFI 扫描启动条目，找到GRUB的EFI文件，加载 grubx64.efi到内存并将控制权交给grub。UEFI存放在efi分区中。</p>
 <h3 id="GRUB"><a href="#GRUB" class="headerlink" title="GRUB"></a>GRUB</h3><p>GRUB（GNU GRand Unified Bootloader）是一个bootloader,可以让用户选择不同的操作系统进行启动。GRUB首先会读取文件系统、随后加载配置文件（grub.cfg）。grub.cfg是一个由 GRUB 命令组成的脚本文件，它定义了启动菜单的显示方式、可用的操作系统列表、以及每个系统的具体加载命令（内核路径、参数、根分区位置等）。用户点击要启动的操作系统之后，grub负责对这个内核进行引导启动。</p>
-<h3 id="启动内核"><a href="#启动内核" class="headerlink" title="启动内核"></a>启动内核</h3>
+<h3 id="启动内核"><a href="#启动内核" class="headerlink" title="启动内核"></a>启动内核</h3><p>grub会读取vmlinuz和initramfs到内存中，并跳转到vmlinuz的入口。因为vmlinuz是一个压缩文件，所以内核为它准备了一段用于解压的代码，存放在<code>linux/arch/x86/boot/compressed/head_64.S</code>中。在这段汇编程序中做了一系列工作后，调用 <code>extract_kernel</code> 函数对kernel进行解压。解压缩后跳转到真正的内核入口，即 <code>arch/x86/kernel/head_64.S</code>。</p>
+
                 
               </div>
             
