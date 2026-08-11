@@ -19,15 +19,15 @@
   <meta name="author" content="myslqyr">
   <meta name="keywords" content="">
   
-    <meta name="description" content="0x01: Linux From Scratch本篇blog是基于Linux From Scratch - Version 13.0-systemd的学习过程。 part1:准备工作分区在这一章节中我们的主要目的是给磁盘进行分区并在分区中刷入对应的文件系统。由于笔者的kubuntu没有空闲的磁盘空间，重新分区可能会出现问题，于是就在&#x2F;home下搞了块60G的虚拟磁盘进行实验。 1fall">
+    <meta name="description" content="0x01: Linux From Scratch本篇blog是基于Linux From Scratch - Version 13.0-systemd的学习过程。 每次重新启动后要检查的事情： disk是否挂载到&#x2F;mnt&#x2F;lfs（LFS） 运行 1findmnt $LFS 要有相应的输出。 part1:准备工作分区在这一章节中我们的主要目的是给磁盘进行分区并在分区中刷入对应的文件">
 <meta property="og:type" content="article">
 <meta property="og:title" content="lfs">
 <meta property="og:url" content="http://example.com/2026/05/01/lfs/index.html">
 <meta property="og:site_name" content="myslqyr&#39;s blog">
-<meta property="og:description" content="0x01: Linux From Scratch本篇blog是基于Linux From Scratch - Version 13.0-systemd的学习过程。 part1:准备工作分区在这一章节中我们的主要目的是给磁盘进行分区并在分区中刷入对应的文件系统。由于笔者的kubuntu没有空闲的磁盘空间，重新分区可能会出现问题，于是就在&#x2F;home下搞了块60G的虚拟磁盘进行实验。 1fall">
+<meta property="og:description" content="0x01: Linux From Scratch本篇blog是基于Linux From Scratch - Version 13.0-systemd的学习过程。 每次重新启动后要检查的事情： disk是否挂载到&#x2F;mnt&#x2F;lfs（LFS） 运行 1findmnt $LFS 要有相应的输出。 part1:准备工作分区在这一章节中我们的主要目的是给磁盘进行分区并在分区中刷入对应的文件">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-05-01T08:38:13.000Z">
-<meta property="article:modified_time" content="2026-06-10T08:15:07.254Z">
+<meta property="article:modified_time" content="2026-08-01T10:36:00.456Z">
 <meta property="article:author" content="myslqyr">
 <meta property="article:tag" content="lfs">
 <meta name="twitter:card" content="summary_large_image">
@@ -363,7 +363,7 @@
         
         
         
-          49 分钟
+          50 分钟
         
       </span>
     
@@ -408,13 +408,18 @@
               <div class="markdown-body">
                 
                 <h1 id="0x01-Linux-From-Scratch"><a href="#0x01-Linux-From-Scratch" class="headerlink" title="0x01: Linux From Scratch"></a>0x01: Linux From Scratch</h1><p>本篇blog是基于Linux From Scratch - Version 13.0-systemd的学习过程。</p>
+<p><strong>每次重新启动后要检查的事情：</strong></p>
+<p><strong>disk是否挂载到&#x2F;mnt&#x2F;lfs（LFS）</strong></p>
+<p>运行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash">findmnt <span class="hljs-variable">$LFS</span><br></code></pre></td></tr></table></figure>
+<p>要有相应的输出。</p>
 <h2 id="part1-准备工作"><a href="#part1-准备工作" class="headerlink" title="part1:准备工作"></a>part1:准备工作</h2><h3 id="分区"><a href="#分区" class="headerlink" title="分区"></a>分区</h3><p>在这一章节中我们的主要目的是给磁盘进行分区并在分区中刷入对应的文件系统。由于笔者的kubuntu没有空闲的磁盘空间，重新分区可能会出现问题，于是就在&#x2F;home下搞了块60G的虚拟磁盘进行实验。</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">fallocate -l 60G ./lfs_disk.img<br></code></pre></td></tr></table></figure>
 <p>分配好后是进行分区，使用cfdisk命令，这个命令提供了一个简单的图形化的页面对磁盘进行分区操作。</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">cfdisk ./lfs_disk.img<br></code></pre></td></tr></table></figure>
 <p>当然也可以使用fdisk进行纯命令行的操作。分区后我们可以使用</p>
 <figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs sh">fdisk -l ./lfs_disk.img<br></code></pre></td></tr></table></figure>
-<p>查看分区情况，，笔者分了0.5G的EFI，4G的swap以及55.5G的&#x2F;，如下所示：</p>
+<p>查看分区情况，笔者分了0.5G的EFI，4G的swap以及55.5G的&#x2F;，如下所示：</p>
 <figure class="highlight tap"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><code class="hljs tap">myslqyr@myslqyr-ubuntu ~/c/lfs&gt; fdisk -l ./lfs_disk.img<br>Disk ./lfs_disk.img:<span class="hljs-number"> 60 </span>GiB,<span class="hljs-number"> 64424509440 </span>bytes,<span class="hljs-number"> 125829120 </span>sectors<br>Units: sectors of<span class="hljs-number"> 1 </span>*<span class="hljs-number"> 512 </span>=<span class="hljs-number"> 512 </span>bytes<br>Sector size (logical/physical):<span class="hljs-number"> 512 </span>bytes /<span class="hljs-number"> 512 </span>bytes<br>I/O size (minimum/optimal):<span class="hljs-number"> 512 </span>bytes /<span class="hljs-number"> 512 </span>bytes<br>Disklabel type: gpt<br>Disk identifier: BF82A038-B3EE-4AA2-82D7-0889E36ED794<br><br>Device            Start       End   Sectors  Size Type<br>./lfs_disk.img1   <span class="hljs-number"> 2048 </span> <span class="hljs-number"> 1050623 </span> <span class="hljs-number"> 1048576 </span> 512M EFI System<br>./lfs_disk.img2<span class="hljs-number"> 1050624 </span> <span class="hljs-number"> 9439231 </span> <span class="hljs-number"> 8388608 </span>   4G Linux swap<br>./lfs_disk.img3<span class="hljs-number"> 9439232 </span>125827071<span class="hljs-number"> 116387840 </span>55.5G Linux root (x86-64)<br></code></pre></td></tr></table></figure>
 <p>由于我们没有在物理硬盘上建立分区，所以之后是让宿主机识别到这部分。</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> losetup -fP ./lfs_disk.img<br></code></pre></td></tr></table></figure>
