@@ -27,7 +27,7 @@
 <meta property="og:description" content="0x01: Linux From Scratch本篇blog是基于Linux From Scratch - Version 13.0-systemd的学习过程。 每次重新启动后要检查的事情： disk是否挂载到&#x2F;mnt&#x2F;lfs（LFS）运行 1findmnt $LFS 要有相应的输出。 每次关机前要做的事情： 1234567exitmountpoint -q $LFS&#x2F;dev&#x2F;">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-05-01T08:38:13.000Z">
-<meta property="article:modified_time" content="2026-08-23T05:02:38.269Z">
+<meta property="article:modified_time" content="2026-09-04T05:35:23.465Z">
 <meta property="article:author" content="myslqyr">
 <meta property="article:tag" content="lfs">
 <meta name="twitter:card" content="summary_large_image">
@@ -352,7 +352,7 @@
       <span class="post-meta mr-2">
         <i class="iconfont icon-chart"></i>
         
-          6.6k 字
+          6.7k 字
         
       </span>
     
@@ -489,7 +489,7 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">cd</span> <span class="hljs-variable">$LFS</span><br><span class="hljs-built_in">rm</span> -rf ./*<br>tar -xpf <span class="hljs-variable">$HOME</span>/lfs-temp-tools-13.0-systemd.tar.xz<br></code></pre></td></tr></table></figure>
 <p>继续接下来的实验时要回到chroot环境并确保虚拟文件系统已挂载。</p>
 <h2 id="part07：构建系统"><a href="#part07：构建系统" class="headerlink" title="part07：构建系统"></a>part07：构建系统</h2><p>按照教程编译那几十个软件包。</p>
-<h2 id="part08：系统配置"><a href="#part08：系统配置" class="headerlink" title="part08：系统配置"></a>part08：系统配置</h2><p>按照lfs book配置一下就行。</p>
+<h2 id="part08：系统配置"><a href="#part08：系统配置" class="headerlink" title="part08：系统配置"></a>part08：系统配置</h2><p>按照lfs book配置一下就行。有一些章节写的挺迷惑的，很多配置项都不需要搞，需要根据实际情况来评估一下。</p>
 <h2 id="part09：启动"><a href="#part09：启动" class="headerlink" title="part09：启动"></a>part09：启动</h2><p>按照blfs的内容安装grub（为了通过uefi启动）。也可以将安装步骤发给gpt,让gpt帮助写启动脚本之类的工作，AI真强大喵。<br>可以使用下列启动脚本：</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><code class="hljs bash"><span class="hljs-built_in">sudo</span> qemu-system-x86_64 \<br>  -machine pc \<br>  -m 4096 \<br>  -smp 4 \<br>  -drive <span class="hljs-keyword">if</span>=pflash,format=raw,<span class="hljs-built_in">readonly</span>=on,file=/usr/share/OVMF/OVMF_CODE_4M.fd \<br>  -drive <span class="hljs-keyword">if</span>=pflash,format=raw,file=/home/myslqyr/czh/lfs/OVMF_VARS_4M.fd \<br>  -drive file=/home/myslqyr/czh/lfs/lfs_disk.img,format=raw,<span class="hljs-keyword">if</span>=ide \<br>  -boot menu=on<br></code></pre></td></tr></table></figure>
 <p>这时候disk不可以挂载。启动之后用户名是root,密码是在安装shadow时自己设定的。至此我们就自己搓出来了一个发行版，不过笔者还有一系列疑问没有仔细研究，后续会持续更新。</p>
