@@ -4,6 +4,31 @@
   
   
   <entry>
+    <title>x86_architecture</title>
+    <link href="/2026/09/09/x86-architecture/"/>
+    <url>/2026/09/09/x86-architecture/</url>
+    
+    <content type="html"><![CDATA[<p>上操作系统高级教程课发现自己的x86架构机制忘完了，随缘更新一些。</p>]]></content>
+    
+    
+    <categories>
+      
+      <category>x86</category>
+      
+    </categories>
+    
+    
+    <tags>
+      
+      <tag>x86</tag>
+      
+    </tags>
+    
+  </entry>
+  
+  
+  
+  <entry>
     <title>ebpf</title>
     <link href="/2026/09/07/ebpf/"/>
     <url>/2026/09/07/ebpf/</url>
