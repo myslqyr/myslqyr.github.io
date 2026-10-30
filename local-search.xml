@@ -5,10 +5,10 @@
   
   <entry>
     <title>linux virtual memory</title>
-    <link href="/2026/10/30/linux%20virtual%20memory/"/>
-    <url>/2026/10/30/linux%20virtual%20memory/</url>
+    <link href="/2026/10/30/linux-virtual-memory/"/>
+    <url>/2026/10/30/linux-virtual-memory/</url>
     
-    <content type="html"><![CDATA[<h1 id="Linux虚拟内存管理"><a href="#Linux虚拟内存管理" class="headerlink" title="Linux虚拟内存管理"></a>Linux虚拟内存管理</h1><p><del>下面会以x86架构和7.2内核为例</del></p><h2 id="linux虚拟地址结构与进程虚拟地址空间"><a href="#linux虚拟地址结构与进程虚拟地址空间" class="headerlink" title="linux虚拟地址结构与进程虚拟地址空间"></a>linux虚拟地址结构与进程虚拟地址空间</h2><p>目前的64位计算机上有48位用来描述虚拟地址，其结构为</p><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">全局页目录项（9位）+ 上层页目录项（9位）+ 中间页目录项（9位）+ 页表项（9位）+ 页内偏移（12位）<br></code></pre></td></tr></table></figure><p>高16位全0为用户空间虚拟地址，全1为内核空间虚拟地址，即低128T是用户虚拟地址空间，高128T是内核虚拟地址空间。<br><img src="/2026/10/30/linux%20virtual%20memory/1.png" alt="1.png"></p>]]></content>
+    <content type="html"><![CDATA[<h1 id="Linux虚拟内存管理"><a href="#Linux虚拟内存管理" class="headerlink" title="Linux虚拟内存管理"></a>Linux虚拟内存管理</h1><p><del>下面会以x86架构和7.2内核为例</del></p><h2 id="linux虚拟地址结构与进程虚拟地址空间"><a href="#linux虚拟地址结构与进程虚拟地址空间" class="headerlink" title="linux虚拟地址结构与进程虚拟地址空间"></a>linux虚拟地址结构与进程虚拟地址空间</h2><p>目前的64位计算机上有48位用来描述虚拟地址，其结构为</p><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><code class="hljs text">全局页目录项（9位）+ 上层页目录项（9位）+ 中间页目录项（9位）+ 页表项（9位）+ 页内偏移（12位）<br></code></pre></td></tr></table></figure><p>高16位全0为用户空间虚拟地址，全1为内核空间虚拟地址，即低128T是用户虚拟地址空间，高128T是内核虚拟地址空间。<br><img src="/2026/10/30/linux-virtual-memory/1.png" alt="1.png"></p>]]></content>
     
     
     <categories>
